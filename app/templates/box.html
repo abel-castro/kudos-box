@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col g-4">
+            <a class="btn btn-primary" href="create-message" role="button">Create a new message <i class="bi bi-plus-square"></i></a>
+        </div>
+    </div>
+    <div class="row">
+        {% for message in messages %}
+          <div class="col-xs-12 col-md-4 g-4">
+            <div class="card text-center w-100 h-100 {{ message.get_card_css_classes }}" style="width: 18rem;">
+              <div class="card-body">
+                {% if message.title %}
+                    <h5 class="card-title">{{ message.title }}</h5>
+                {% endif %}
+                <h6 class="card-subtitle mb-2 small">{{ message.timestamp }}</h6>
+                <p class="card-text">{{ message.text }}</p>
+              </div>
+            </div>
+          </div>
+    {% if forloop.counter|divisibleby:3 %}
+    </div>
+    <div class="row">
+        {% endif %}
+        {% empty %}
+            <div class="col g-4">
+                <h3 class="text-center">This box is empty!</h3>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

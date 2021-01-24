@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/prod/django/Dockerfile
+    command: /start
+    depends_on:
+      - postgres
+    env_file: .env
+    expose:
+      - 8000
+    image: kudos-box_prod_django
+    volumes:
+      - media_volume:/app/media
+      - static_volume:/app/static
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/postgres/Dockerfile
+    env_file: .env
+    image: kudos-box_prod_postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  nginx:
+    build: ./compose/prod/nginx
+    depends_on:
+      - django
+    image: kudos-box_prod_nginx
+    ports:
+      - 80:80
+    volumes:
+      - media_volume:/app/media
+      - static_volume:/app/static
+
+volumes:
+  media_volume:
+  postgres_data:
+  static_volume:

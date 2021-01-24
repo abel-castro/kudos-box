@@ -1,0 +1,11 @@
+DEBUG=True
+REDIS_URL=redis://redis:6379/0
+SECRET_KEY=my_secret_key
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+
+# PostgreSQL
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=db_name
+POSTGRES_USER=my_user
+POSTGRES_PASSWORD=my_password

@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: kudos-box_dev_django
+    command: /start
+    volumes:
+      - ./app/:/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/postgres/Dockerfile
+    image: kudos-box_prod_postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:
