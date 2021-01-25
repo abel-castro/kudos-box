@@ -1,10 +1,21 @@
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, ListView
 
+from kudosbox.settings import ADMIN_EMAIL
 from .forms import MessageForm
 from .models import Box, Message
 from guardian.mixins import PermissionRequiredMixin
+
+
+class HomeView(ListView):
+    model = Box
+    template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ADMIN_EMAIL'] = ADMIN_EMAIL
+        return context
 
 
 class BoxView(PermissionRequiredMixin, DetailView):

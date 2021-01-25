@@ -1,9 +1,9 @@
-DEBUG=False
+DEBUG=True
 SECRET_KEY=my_secret_key
-ALLOWED_HOSTS=127.0.0.1,0.0.0.0
-REDIS_URL=redis://redis:6379/0
+ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
 
 # PostgreSQL
+DATABASE_URL=postgres://my_user:my_password@postgres:5432/db_name
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
 POSTGRES_DB=db_name
