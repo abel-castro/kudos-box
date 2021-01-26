@@ -1,0 +1,13 @@
+!.env
+!.pylintrc
+__pycache__
+.DS_Store
+.idea
+.env
+.git
+.gitignore
+.dockerignore
+screenshot.jpg
+env_template
+env_template_prod
+README.md

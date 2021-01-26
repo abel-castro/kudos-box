@@ -1,5 +1,5 @@
 # Kudos-box
-Source code of  [kudos-box.com](https://kudos-box.com)
+Source code of  [kudos-box.com](http://kudos-box.com)
 
 At work we have a cardboard box in which we can leave notes anonymously 
 to praise other colleagues. It is called Kudos-box and it is and the origin.
