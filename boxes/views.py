@@ -23,6 +23,12 @@ class BoxView(PermissionRequiredMixin, DetailView):
     template_name = 'box.html'
     permission_required = 'boxes.view_box'
 
+    def dispatch(self, request, *args, **kwargs):
+
+        if request.user.is_anonymous:
+            print('yes')
+        return super(BoxView, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         messages = Message.objects.filter(box=self.get_object())
@@ -47,7 +53,7 @@ class CreateMessageView(CreateView):
         return box
 
     def get_success_url(self):
-        return f'/box/{self.get_box_object().slug}'
+        return f'/boxes/{self.get_box_object().slug}'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -22,6 +22,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'', HomeView.as_view()),
-    path(r'box/<slug:slug>/', BoxView.as_view()),
-    path(r'box/<slug:slug>/create-message/', CreateMessageView.as_view()),
+    path(r'boxes/<slug:slug>/', BoxView.as_view()),
+    path(r'boxes/<slug:slug>/create-message/', CreateMessageView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
