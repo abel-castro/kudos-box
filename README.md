@@ -28,6 +28,9 @@ to see your runserver.
 - Create a superuser:
 ```docker-compose run --rm django /app/manage.py createsuperuser ```
 
+- Create the demo box (not password restricted):
+```docker-compose run --rm django /app/manage.py create_demo_box ```
+
 ### To-dos
 - Notify box members via email when a new message arrives
 
