@@ -28,15 +28,16 @@
         <meta name="theme-color" content="#563d7c">
     </head>
     <body class="d-flex flex-column h-100">
-        <header>
-            <div style="background: #222831" class="navbar navbar-dark shadow-sm">
-                <div class="container">
-                  <a href="/" class="navbar-brand d-flex align-items-center">
-                    <img src="{% get_media_prefix %}kudos-box-logo.png" width="38" height="30" class="me-3" alt="Bootstrap">
-                    <strong>Kudos-box</strong>
-                  </a>
-                </div>
-            </div>
+        <header style="background: #222831" class="bd-header py-2 d-flex align-items-stretch">
+          <div class="container d-flex align-items-center">
+            <h1 class="d-flex align-items-center fs-4 text-white mb-0">
+              <a href="/" class="navbar-brand d-flex align-items-center">
+                <img src="{% get_media_prefix %}kudos-box-logo.png" width="38" height="30" class="me-3" alt="Bootstrap">
+                <strong class="link-light">Kudos-box</strong>
+              </a>
+            </h1>
+            <a href="/" class="ms-auto link-light"  style="text-decoration: none">{{ request.user }}</a>
+          </div>
         </header>
         <main class="flex-shrink-0 mb-5">
             <div class="container">

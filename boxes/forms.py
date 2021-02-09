@@ -1,5 +1,5 @@
 from django import forms
-from .models import Message
+from .models import Box, Message
 
 
 class MessageForm(forms.ModelForm):
@@ -8,3 +8,8 @@ class MessageForm(forms.ModelForm):
         fields = ('title', 'text', 'card_color', 'box')
         widgets = {'box': forms.HiddenInput()}
 
+
+class BoxForm(forms.ModelForm):
+    class Meta:
+        model = Box
+        fields = ('name', 'slug')

@@ -15,13 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from boxes.views import BoxView, CreateMessageView, HomeView
+from boxes.views import BoxDetailView, BoxUserCreateView, BoxCreateView, MessageCreateView, HomeView
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(r'', HomeView.as_view()),
-    path(r'boxes/<slug:slug>/', BoxView.as_view()),
-    path(r'boxes/<slug:slug>/create-message/', CreateMessageView.as_view()),
+    path(r'', HomeView.as_view(), name='home'),
+    path(r'boxes/create/', BoxCreateView.as_view(), name='box-create'),
+    path(r'boxes/<slug:slug>/', BoxDetailView.as_view(), name='box-detail'),
+    path(r'boxes/<slug:slug>/create-user/', BoxUserCreateView.as_view(), name='create-box-user'),
+    path(r'boxes/<slug:slug>/create-message/', MessageCreateView.as_view(), name='message-create'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

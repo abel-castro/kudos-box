@@ -31,6 +31,9 @@ to see your runserver.
 - Create the demo box (not password restricted):
 ```docker-compose run --rm django /app/manage.py create_demo_box ```
 
+- Run the tests:
+```docker-compose run --rm django /app/manage.py test ```
+
 ### To-dos
 - Notify box members via email when a new message arrives
 

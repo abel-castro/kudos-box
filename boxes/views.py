@@ -1,9 +1,16 @@
+from django.contrib.auth import login
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, ListView
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from guardian.shortcuts import assign_perm
+
 
 from kudosbox.settings import ADMIN_EMAIL
-from .forms import MessageForm
+from .forms import BoxForm, MessageForm
 from .models import Box, Message
 from guardian.mixins import PermissionRequiredMixin
 
@@ -18,7 +25,7 @@ class HomeView(ListView):
         return context
 
 
-class BoxView(PermissionRequiredMixin, DetailView):
+class BoxDetailView(PermissionRequiredMixin, DetailView):
     model = Box
     template_name = 'box.html'
     permission_required = 'boxes.view_box'
@@ -27,7 +34,7 @@ class BoxView(PermissionRequiredMixin, DetailView):
 
         if request.user.is_anonymous:
             print('yes')
-        return super(BoxView, self).dispatch(request, *args, **kwargs)
+        return super(BoxDetailView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -36,9 +43,44 @@ class BoxView(PermissionRequiredMixin, DetailView):
         return context
 
 
-class CreateMessageView(CreateView):
+class BoxCreateView(CreateView):
+    template_name = 'box_create.html'
+    model = Box
+    form_class = BoxForm
+
+    def form_valid(self, form):
+        box = form.save()
+        url = reverse_lazy('create-box-user', kwargs={'slug': box.slug})
+        return HttpResponseRedirect(url)
+
+
+class BoxUserCreateView(CreateView):
+    template_name = 'box_user_create.html'
+    model = User
+    form_class = UserCreationForm
+
+    def get_box(self):
+        box_slug = self.kwargs.get('slug', None)
+        return get_object_or_404(Box, slug=box_slug)
+
+    def form_valid(self, form):
+        box = self.get_box()
+        user = form.save(commit=False)
+        user.is_staff = True
+        user.save()
+        django_login_backend = 'django.contrib.auth.backends.ModelBackend'
+        login(self.request, user, backend=django_login_backend)
+
+        demo_box, created = Box.objects.get_or_create(name='Demo', slug='demo')
+        assign_perm('view_box', user, demo_box)
+        assign_perm('view_box', user, box)
+        url = reverse_lazy('box-detail', kwargs={'slug': box.slug})
+        return HttpResponseRedirect(url)
+
+
+class MessageCreateView(CreateView):
     model = Message
-    template_name = 'create_message.html'
+    template_name = 'message_create.html'
     form_class = MessageForm
 
     def get_initial(self):
@@ -53,9 +95,11 @@ class CreateMessageView(CreateView):
         return box
 
     def get_success_url(self):
-        return f'/boxes/{self.get_box_object().slug}'
+        return reverse_lazy('box-detail', kwargs={'slug': self.get_box_object().slug})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['box'] = self.get_box_object()
         return context
+
+
