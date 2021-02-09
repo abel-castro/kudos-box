@@ -36,7 +36,9 @@
                 <strong class="link-light">Kudos-box</strong>
               </a>
             </h1>
+            {% if request.user.is_authenticated %}
             <a href="/" class="ms-auto link-light"  style="text-decoration: none">{{ request.user }}</a>
+            {% endif %}
           </div>
         </header>
         <main class="flex-shrink-0 mb-5">
