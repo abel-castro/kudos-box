@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Box, Member, Message
 from guardian.admin import GuardedModelAdmin
+
+from .models import Box, Member, Message
 
 
 # With object permissions support

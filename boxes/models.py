@@ -18,12 +18,12 @@ class Box(models.Model):
 
 
 CARD_COLOR_CHOICES = [
-    ('BLUE', 'Blue'),
-    ('RED', 'Red'),
-    ('YELLOW', 'Yellow'),
-    ('GREEN', 'Green'),
-    ('BLACK', 'Black'),
-    ('DEFAULT', 'Default'),
+    ("BLUE", "Blue"),
+    ("RED", "Red"),
+    ("YELLOW", "Yellow"),
+    ("GREEN", "Green"),
+    ("BLACK", "Black"),
+    ("DEFAULT", "Default"),
 ]
 
 
@@ -31,7 +31,9 @@ class Message(models.Model):
     title = models.CharField(max_length=100, blank=True)
     text = models.TextField()
     box = models.ForeignKey(Box, on_delete=models.DO_NOTHING)
-    card_color = models.CharField(choices=CARD_COLOR_CHOICES, default="DEFAULT", max_length=10)
+    card_color = models.CharField(
+        choices=CARD_COLOR_CHOICES, default="DEFAULT", max_length=10
+    )
     timestamp = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -44,15 +46,15 @@ class Message(models.Model):
         https://getbootstrap.com/docs/5.0/components/
         card/#card-styles
         """
-        if self.card_color == 'BLUE':
-            return 'text-white bg-primary'
-        elif self.card_color == 'RED':
-            return 'text-white bg-danger'
-        elif self.card_color == 'YELLOW':
-            return 'bg-warning'
-        elif self.card_color == 'GREEN':
-            return 'text-white bg-success'
-        elif self.card_color == 'BLACK':
-            return 'text-white bg-dark'
+        if self.card_color == "BLUE":
+            return "text-white bg-primary"
+        elif self.card_color == "RED":
+            return "text-white bg-danger"
+        elif self.card_color == "YELLOW":
+            return "bg-warning"
+        elif self.card_color == "GREEN":
+            return "text-white bg-success"
+        elif self.card_color == "BLACK":
+            return "text-white bg-dark"
         else:
-            return ''
+            return ""

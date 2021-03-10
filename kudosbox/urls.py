@@ -13,17 +13,27 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
-from boxes.views import BoxDetailView, BoxUserCreateView, BoxCreateView, MessageCreateView, HomeView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import path
+
+from boxes.views import (BoxCreateView, BoxDetailView, BoxUserCreateView,
+                         HomeView, MessageCreateView)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path(r'', HomeView.as_view(), name='home'),
-    path(r'boxes/create/', BoxCreateView.as_view(), name='box-create'),
-    path(r'boxes/<slug:slug>/', BoxDetailView.as_view(), name='box-detail'),
-    path(r'boxes/<slug:slug>/create-user/', BoxUserCreateView.as_view(), name='create-box-user'),
-    path(r'boxes/<slug:slug>/create-message/', MessageCreateView.as_view(), name='message-create'),
+    path("admin/", admin.site.urls),
+    path(r"", HomeView.as_view(), name="home"),
+    path(r"boxes/create/", BoxCreateView.as_view(), name="box_create"),
+    path(r"boxes/<slug:slug>/", BoxDetailView.as_view(), name="box_detail"),
+    path(
+        r"boxes/<slug:slug>/create-user/",
+        BoxUserCreateView.as_view(),
+        name="create_box_user",
+    ),
+    path(
+        r"boxes/<slug:slug>/create-message/",
+        MessageCreateView.as_view(),
+        name="message_create",
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -37,7 +37,7 @@
               </a>
             </h1>
             {% if request.user.is_authenticated %}
-            <a href="/" class="ms-auto link-light"  style="text-decoration: none">{{ request.user }}</a>
+            <a href="{{ box_url }}" class="ms-auto link-light"  style="text-decoration: none">{{ request.user }}</a>
             {% endif %}
           </div>
         </header>
