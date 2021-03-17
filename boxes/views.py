@@ -5,14 +5,14 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, RedirectView
 from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import assign_perm
 
 from kudosbox.settings import ADMIN_EMAIL
 
 from .forms import BoxForm, MessageForm
-from .mixins import BoxUrlMixin
+from .mixins import BoxUrlMixin, GetBoxMixin
 from .models import Box, Message
 
 
@@ -26,6 +26,19 @@ class HomeView(BoxUrlMixin, ListView):
         return context
 
 
+class ArchiveBoxMessagesView(PermissionRequiredMixin, GetBoxMixin, RedirectView):
+    permission_required = "boxes.view_box"
+
+    def dispatch(self, request, *args, **kwargs):
+        box = self.get_box()
+        Message.objects.filter(box=box).update(archived=True)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_redirect_url(self, *args, **kwargs):
+        box = self.get_box()
+        return reverse_lazy("box_detail", kwargs={"slug": box.slug})
+
+
 class BoxDetailView(BoxUrlMixin, PermissionRequiredMixin, DetailView):
     model = Box
     template_name = "box.html"
@@ -34,7 +47,10 @@ class BoxDetailView(BoxUrlMixin, PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         messages = Message.objects.filter(box=self.get_object())
-        context["messages"] = messages
+        messages_archived = messages.archived()
+        messages_not_archived = messages.not_archived()
+        context["messages_archived"] = messages_archived
+        context["messages_not_archived"] = messages_not_archived
         return context
 
 
@@ -49,14 +65,10 @@ class BoxCreateView(BoxUrlMixin, CreateView):
         return HttpResponseRedirect(url)
 
 
-class BoxUserCreateView(BoxUrlMixin, CreateView):
+class BoxUserCreateView(BoxUrlMixin, GetBoxMixin, CreateView):
     template_name = "box_user_create.html"
     model = User
     form_class = UserCreationForm
-
-    def get_box(self):
-        box_slug = self.kwargs.get("slug", None)
-        return get_object_or_404(Box, slug=box_slug)
 
     def form_valid(self, form):
         box = self.get_box()
@@ -73,26 +85,26 @@ class BoxUserCreateView(BoxUrlMixin, CreateView):
         return HttpResponseRedirect(url)
 
 
-class MessageCreateView(BoxUrlMixin, CreateView):
+class MessageCreateView(BoxUrlMixin, GetBoxMixin, CreateView):
     model = Message
     template_name = "message_create.html"
     form_class = MessageForm
 
     def get_initial(self):
         initial = super().get_initial()
-        initial["box"] = self.get_box_object().id
+        initial["box"] = self.get_box().id
         return initial
 
-    def get_box_object(self):
-        box = get_object_or_404(Box, slug=self.kwargs["slug"])
+    def get_box(self):
+        box = super().get_box()
         if not self.request.user.has_perm("boxes.view_box", box):
             raise PermissionDenied()
         return box
 
     def get_success_url(self):
-        return reverse_lazy("box_detail", kwargs={"slug": self.get_box_object().slug})
+        return reverse_lazy("box_detail", kwargs={"slug": self.get_box().slug})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["box"] = self.get_box_object()
+        context["box"] = self.get_box()
         return context

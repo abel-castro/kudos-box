@@ -1,5 +1,7 @@
 from django.db import models
 
+from .managers import MessagesManager
+
 
 class Member(models.Model):
     email = models.EmailField(unique=True)
@@ -35,6 +37,12 @@ class Message(models.Model):
         choices=CARD_COLOR_CHOICES, default="DEFAULT", max_length=10
     )
     timestamp = models.DateTimeField(auto_now=True)
+    archived = models.BooleanField(default=False)
+
+    objects = MessagesManager()
+
+    class Meta:
+        ordering = ("-timestamp",)
 
     def __str__(self):
         return f"{self.box}: {self.text}"

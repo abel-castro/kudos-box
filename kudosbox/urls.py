@@ -18,14 +18,19 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from boxes.views import (BoxCreateView, BoxDetailView, BoxUserCreateView,
-                         HomeView, MessageCreateView)
+from boxes.views import (ArchiveBoxMessagesView, BoxCreateView, BoxDetailView,
+                         BoxUserCreateView, HomeView, MessageCreateView)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(r"", HomeView.as_view(), name="home"),
     path(r"boxes/create/", BoxCreateView.as_view(), name="box_create"),
     path(r"boxes/<slug:slug>/", BoxDetailView.as_view(), name="box_detail"),
+    path(
+        r"boxes/<slug:slug>/archive-messages/",
+        ArchiveBoxMessagesView.as_view(),
+        name="archive_box_messages",
+    ),
     path(
         r"boxes/<slug:slug>/create-user/",
         BoxUserCreateView.as_view(),

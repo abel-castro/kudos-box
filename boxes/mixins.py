@@ -1,5 +1,8 @@
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from guardian.shortcuts import get_objects_for_user
+
+from .models import Box
 
 
 class BoxUrlMixin:
@@ -14,3 +17,9 @@ class BoxUrlMixin:
             if box:
                 context["box_url"] = reverse("box_detail", kwargs={"slug": box.slug})
         return context
+
+
+class GetBoxMixin:
+    def get_box(self):
+        box_slug = self.kwargs.get("slug", None)
+        return get_object_or_404(Box, slug=box_slug)

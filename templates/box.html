@@ -3,30 +3,41 @@
 {% block content %}
     <div class="row">
         <div class="col g-4">
-            <a class="btn btn-primary" href="create-message" role="button">Create a new message <i class="bi bi-plus-square"></i></a>
+            <a class="btn btn-primary" href="{% url 'message_create' box.slug %}" role="button">Create a new message <i class="bi bi-plus-square"></i></a>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#archiveMessagesModal">
+              Archive messages  <i class="bi bi-archive"></i>
+            </button>
         </div>
     </div>
-    <div class="row">
-        {% for message in messages %}
-          <div class="col-xs-12 col-md-4 g-4">
-            <div class="card text-center w-100 h-100 {{ message.get_card_css_classes }}" style="width: 18rem;">
-              <div class="card-body">
-                {% if message.title %}
-                    <h5 class="card-title">{{ message.title }}</h5>
-                {% endif %}
-                <h6 class="card-subtitle mb-2 small">{{ message.timestamp }}</h6>
-                <p class="card-text">{{ message.text }}</p>
-              </div>
-            </div>
-          </div>
-    {% if forloop.counter|divisibleby:3 %}
+    {% include 'extend/messages_container.html' with messages=messages_not_archived %}
+
+    <p>
+        <br>
+        <a class="text-muted" data-bs-toggle="collapse" href="#archivedMessages" role="button" aria-expanded="false" aria-controls="archivedMessages">
+        Show archived messages ({{ messages_archived.count }})
+        </a>
+    </p>
+
+    <div class="collapse" id="archivedMessages">
+      {% include 'extend/messages_container.html' with messages=messages_archived %}
     </div>
-    <div class="row">
-        {% endif %}
-        {% empty %}
-            <div class="col g-4">
-                <h3 class="text-center">This box is empty!</h3>
-            </div>
-        {% endfor %}
+
+<!-- Modal -->
+<div class="modal fade" id="archiveMessagesModal" tabindex="-1" aria-labelledby="archiveMessagesModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Archive Confirmation</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      <div class="modal-body">
+        Are you sure that do you want to archive all messages in this box?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a class="btn btn-primary" href="{% url 'archive_box_messages' box.slug %}" role="button">Archive messages  <i class="bi bi-archive"></i></a>
+      </div>
     </div>
+  </div>
+</div>
 {% endblock %}
