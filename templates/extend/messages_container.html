@@ -7,7 +7,7 @@
                 <h5 class="card-title">{{ message.title }}</h5>
             {% endif %}
             <h6 class="card-subtitle mb-2 small">{{ message.timestamp }}</h6>
-            <p class="card-text">{{ message.text }}</p>
+            <p class="card-text">{{ message.text|linebreaks }}</p>
           </div>
         </div>
       </div>
