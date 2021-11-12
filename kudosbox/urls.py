@@ -22,7 +22,7 @@ from boxes.views import (ArchiveBoxMessagesView, BoxCreateView, BoxDetailView,
                          BoxUserCreateView, HomeView, MessageCreateView)
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path(f"{settings.ADMIN_URL}/", admin.site.urls),
     path(r"", HomeView.as_view(), name="home"),
     path(r"boxes/create/", BoxCreateView.as_view(), name="box_create"),
     path(r"boxes/<slug:slug>/", BoxDetailView.as_view(), name="box_detail"),

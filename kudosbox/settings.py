@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "crispy_forms",
     "guardian",
+    "axes",
     # project apps
     "boxes",
 ]
@@ -132,6 +133,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+ADMIN_URL = os.getenv("ADMIN_URL", "admin")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
