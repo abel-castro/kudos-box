@@ -146,6 +146,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-LOGIN_URL = "/admin/login"
+LOGIN_URL = f"/{ADMIN_URL}/login"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
