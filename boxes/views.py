@@ -4,8 +4,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, RedirectView
+from django.views.generic import CreateView, DetailView, ListView, View
 from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import assign_perm
 
@@ -25,17 +26,13 @@ class HomeView(TrackingMixin, BoxUrlMixin, ListView):
         return context
 
 
-class ArchiveBoxMessagesView(PermissionRequiredMixin, GetBoxMixin, RedirectView):
+class ArchiveBoxMessagesView(PermissionRequiredMixin, GetBoxMixin, View):
     permission_required = "boxes.view_box"
 
     def dispatch(self, request, *args, **kwargs):
         box = self.get_box()
         Message.objects.filter(box=box).update(archived=True)
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_redirect_url(self, *args, **kwargs):
-        box = self.get_box()
-        return reverse_lazy("box_detail", kwargs={"slug": box.slug})
+        return redirect(reverse_lazy("box_detail", kwargs={"slug": box.slug}))
 
 
 class BoxDetailView(TrackingMixin, BoxUrlMixin, PermissionRequiredMixin, DetailView):
