@@ -1,28 +1,27 @@
+from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, RedirectView
 from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import assign_perm
 
-from kudosbox.settings import ADMIN_EMAIL
+from boxes.forms import BoxForm, MessageForm
+from boxes.mixins import BoxUrlMixin, GetBoxMixin
+from boxes.models import Box, Message
+from boxes.tracking_mixing import TrackingMixin
 
-from .forms import BoxForm, MessageForm
-from .mixins import BoxUrlMixin, GetBoxMixin
-from .models import Box, Message
 
-
-class HomeView(BoxUrlMixin, ListView):
+class HomeView(TrackingMixin, BoxUrlMixin, ListView):
     model = Box
     template_name = "home.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["ADMIN_EMAIL"] = ADMIN_EMAIL
+        context["ADMIN_EMAIL"] = settings.ADMIN_EMAIL
         return context
 
 
@@ -39,7 +38,7 @@ class ArchiveBoxMessagesView(PermissionRequiredMixin, GetBoxMixin, RedirectView)
         return reverse_lazy("box_detail", kwargs={"slug": box.slug})
 
 
-class BoxDetailView(BoxUrlMixin, PermissionRequiredMixin, DetailView):
+class BoxDetailView(TrackingMixin, BoxUrlMixin, PermissionRequiredMixin, DetailView):
     model = Box
     template_name = "box.html"
     permission_required = "boxes.view_box"
@@ -54,7 +53,7 @@ class BoxDetailView(BoxUrlMixin, PermissionRequiredMixin, DetailView):
         return context
 
 
-class BoxCreateView(BoxUrlMixin, CreateView):
+class BoxCreateView(TrackingMixin, BoxUrlMixin, CreateView):
     template_name = "box_create.html"
     model = Box
     form_class = BoxForm
@@ -65,7 +64,7 @@ class BoxCreateView(BoxUrlMixin, CreateView):
         return HttpResponseRedirect(url)
 
 
-class BoxUserCreateView(BoxUrlMixin, GetBoxMixin, CreateView):
+class BoxUserCreateView(TrackingMixin, BoxUrlMixin, GetBoxMixin, CreateView):
     template_name = "box_user_create.html"
     model = User
     form_class = UserCreationForm
@@ -85,7 +84,7 @@ class BoxUserCreateView(BoxUrlMixin, GetBoxMixin, CreateView):
         return HttpResponseRedirect(url)
 
 
-class MessageCreateView(BoxUrlMixin, GetBoxMixin, CreateView):
+class MessageCreateView(TrackingMixin, BoxUrlMixin, GetBoxMixin, CreateView):
     model = Message
     template_name = "message_create.html"
     form_class = MessageForm

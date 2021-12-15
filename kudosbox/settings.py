@@ -149,3 +149,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 LOGIN_URL = f"/{ADMIN_URL}/login"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+BASIC_ANALYTICS_URL = os.environ.get("BASIC_ANALYTICS_URL")
+BASIC_ANALYTICS_ID = os.environ.get("BASIC_ANALYTICS_ID")
