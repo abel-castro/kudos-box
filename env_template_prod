@@ -9,3 +9,6 @@ POSTGRES_DB=db_name
 POSTGRES_USER=my_user
 POSTGRES_PASSWORD=my_password
 
+VIRTUAL_HOST=kudos-box.com
+VIRTUAL_PORT=8000
+LETSENCRYPT_HOST=kudos-box.com
