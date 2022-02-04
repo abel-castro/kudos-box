@@ -1,3 +1,7 @@
+from basic_analytics_tracker.mixins import TrackingMixin
+from guardian.mixins import PermissionRequiredMixin
+from guardian.shortcuts import assign_perm
+
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
@@ -7,13 +11,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, View
-from guardian.mixins import PermissionRequiredMixin
-from guardian.shortcuts import assign_perm
 
 from boxes.forms import BoxForm, MessageForm
 from boxes.mixins import BoxUrlMixin, GetBoxMixin
 from boxes.models import Box, Message
-from boxes.tracking_mixing import TrackingMixin
 
 
 class HomeView(TrackingMixin, BoxUrlMixin, ListView):
