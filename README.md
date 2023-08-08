@@ -1,3 +1,5 @@
+> ⚠️ Due to a lack of time, I abandoned this project and no longer own the domain kudos-box.com.
+
 # Kudos-box
 Source code of  [kudos-box.com](http://kudos-box.com)
 
