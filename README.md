@@ -3,7 +3,7 @@
 # Kudos-box
 Source code of  [kudos-box.com](http://kudos-box.com)
 
-AAt work, we had a cardboard box where we could leave anonymous notes to praise other colleagues. It was called the Kudos Box, and that was the origin of the idea for this project.
+At work, we had a cardboard box where we could leave anonymous notes to praise other colleagues. It was called the Kudos Box, and that was the origin of the idea for this project.
 
 I tried to find a digital alternative to it, but since I couldn’t find anything suitable, I decided to create it myself.
 Well, I probably just wanted to write some code, and that was a good excuse for me to do it 😅.
